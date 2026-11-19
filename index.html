@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <!-- Metadata & Content Management Section -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IMS566 Advanced Web Design Development and Content Management Individual Assignment Prototype. Student Portal & Internship Tracker for UiTM.">
+    <meta name="keywords" content="IMS566, UiTM, Web Application, Content Management, Bootstrap 5, Chart.js, Student Portal">
+    <meta name="author" content="UiTM Student">
+    <title>IMS566 | Academic & Internship Management Portal</title>
+
+    <!-- Website Favicon (Graduation Cap SVG) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path fill='%230284c7' d='M320 32c-8.1 0-16.1 1.4-23.7 4.1L15.8 137.4C6.3 140.9 0 149.9 0 160s6.3 19.1 15.8 22.6l57.9 20.9C57.3 229.3 48 259.8 48 291.9v28.1c0 28.4-10.8 57.7-22.3 80.8c-6.5 13-13.9 25.8-22.5 37.6C0 442.7-.9 448.3 .9 453.4s6 8.9 11.2 10.2l64 16c4.2 1.1 8.7 .3 12.4-2s6.3-6.1 7.1-10.4c8.6-42.8 4.3-81.2-2.1-108.7C90.3 344.3 86 329.8 80 316.5V291.9c0-30.2 10.2-58.7 27.9-81.5c12.9-15.5 29.6-28 49.2-35.7l157-61.7c8.2-3.2 17.5 .8 20.7 9s-.8 17.5-9 20.7l-157 61.7c-12.4 4.9-23.3 12.4-32.2 21.6l159.6 57.6c7.6 2.7 15.6 4.1 23.7 4.1s16.1-1.4 23.7-4.1L624.2 182.6c9.5-3.4 15.8-12.5 15.8-22.6s-6.3-19.1-15.8-22.6L343.7 36.1C336.1 33.4 328.1 32 320 32zM128 408c0 35.3 86 72 192 72s192-36.7 192-72L496.7 262.6 354.5 314c-11.1 4-22.8 6-34.5 6s-23.5-2-34.5-6L143.3 262.6 128 408z'/></svg>">
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Google Fonts (Inter & JetBrains Mono for Matric Barcodes) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS Styles -->
+    <link rel="stylesheet" href="style.css?v=13">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- ========================================== -->
+        <!-- LEFT NAVIGATION SIDEBAR SECTION            -->
+        <!-- ========================================== -->
+        <aside class="sidebar-uitm no-print">
+            <!-- TOP SIDEBAR: STUDENT PROFILE & PICTURE UPLOAD -->
+            <div id="user-profile-header" class="text-center mb-4 pb-3 border-bottom border-light border-opacity-25" style="display: none;">
+                <!-- Clickable Avatar Wrapper -->
+                <div class="profile-avatar-wrapper mx-auto mb-2" onclick="document.getElementById('profile-pic-input').click()" title="Click to change profile picture">
+                    <img id="sidebar-profile-img" src="acapapa.jpeg" alt="Student Photo" width="80" height="80" class="rounded-circle object-fit-cover shadow-sm">
+                    <div class="avatar-edit-overlay">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                </div>
+                <!-- Hidden File Input -->
+                <input type="file" id="profile-pic-input" accept="image/*" style="display: none;" onchange="handleProfilePicUpload(event)">
+
+                <!-- Student Details -->
+                <h6 id="nav-user-display" class="text-white fw-bold mb-0 text-truncate px-2">Aina Binti Ali</h6>
+                <small id="nav-user-id" class="text-warning d-block fw-medium">ID: 2023459812</small>
+                <span class="badge bg-light text-dark mt-1" style="font-size: 0.7rem;">CDIM262 • Sem 5</span>
+
+                <!-- Dedicated Student Profile Page Button (Above the divider line) -->
+                <div class="mt-2 px-2">
+                    <a href="#" id="nav-profile" onclick="navigateTo('profile')" class="btn btn-sm w-100 rounded-pill fw-semibold d-flex align-items-center justify-content-center gap-2 profile-pill-btn">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>Student Profile & ID</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <ul class="nav nav-pills flex-column mb-auto w-100" id="nav-links-container" style="display: none;">
+                <li class="nav-item">
+                    <a class="nav-link active font-medium" id="nav-dashboard" href="#" onclick="navigateTo('dashboard')">
+                        <i class="fa-solid fa-chart-line me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-medium" id="nav-courses" href="#" onclick="navigateTo('courses')">
+                        <i class="fa-solid fa-book-open me-2"></i> Course Catalog
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-medium" id="nav-timetable" href="#" onclick="navigateTo('timetable')">
+                        <i class="fa-solid fa-calendar-week me-2"></i> Class Timetable
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-medium" id="nav-results" href="#" onclick="navigateTo('results')">
+                        <i class="fa-solid fa-graduation-cap me-2"></i> Exam & Results
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-medium" id="nav-internship" href="#" onclick="navigateTo('internship')">
+                        <i class="fa-solid fa-briefcase me-2"></i> Tasks & Internship
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-medium" id="nav-calendar" href="#" onclick="navigateTo('calendar')">
+                        <i class="fa-solid fa-calendar-days me-2"></i> Academic Calendar
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Bottom Sidebar Controls: Theme Toggle & Login/Logout -->
+            <div class="mt-auto w-100 pt-3 border-top border-light border-opacity-25 d-flex flex-column gap-2">
+                <button id="btn-theme-toggle" class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2 rounded-pill px-3" onclick="toggleTheme()">
+                    <i class="fa-solid fa-moon text-warning" id="theme-icon"></i>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
+
+                <button id="btn-logout-nav" class="btn btn-danger btn-sm fw-bold w-100 rounded-pill px-3" style="display: none;" onclick="handleLogout()">
+                    <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                </button>
+
+                <button id="btn-login-nav" class="btn btn-light text-dark btn-sm fw-bold w-100 rounded-pill px-3" onclick="navigateTo('auth')">
+                    <i class="fa-solid fa-lock me-1"></i> Login
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Sidebar Backdrop -->
+        <div id="sidebar-backdrop" class="sidebar-backdrop no-print" onclick="toggleMobileSidebar()"></div>
+
+        <!-- MAIN WRAPPER FOR CONTENT & FOOTER -->
+        <div class="main-wrapper">
+            <!-- MOBILE TOP NAVBAR (Visible only on screens < 992px) -->
+            <header class="mobile-topbar d-lg-none d-flex align-items-center justify-content-between px-3 py-2 shadow-sm no-print">
+                <button class="btn btn-outline-light btn-sm" type="button" onclick="toggleMobileSidebar()" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars fs-5"></i>
+                </button>
+                <span class="text-white fw-bold small">UiTM Student Portal</span>
+                <button class="btn btn-outline-light btn-sm rounded-circle" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <i class="fa-solid fa-moon text-warning" id="mobile-theme-icon"></i>
+                </button>
+            </header>
+
+            <!-- TOAST NOTIFICATION CONTAINER -->
+            <div class="toast-container no-print" id="toast-container"></div>
+
+            <!-- MAIN CONTAINER FOR DYNAMIC PAGE VIEWS -->
+            <main class="container-fluid px-4 py-4 flex-grow-1">
+
+                <!-- 1. AUTHENTICATION PAGE -->
+                <section id="view-auth" class="page-view active">
+                    <div class="row justify-content-center my-4">
+                        <div class="col-12 col-md-8 col-lg-5">
+                            <div class="card card-custom p-4 shadow-lg border-0">
+                                <ul class="nav nav-pills nav-fill mb-4 border-bottom pb-2" id="authTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active fw-bold" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab">Login Portal</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link fw-bold" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab">Register Account</button>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="authTabContent">
+                                    <!-- Login Tab -->
+                                    <div class="tab-pane fade show active" id="pills-login" role="tabpanel">
+                                        <div class="text-center mb-3">
+                                            <h4 class="fw-bold text-dark">Welcome Back</h4>
+                                            <p class="text-muted small">Sign in to access your IMS566 Academic Dashboard</p>
+                                        </div>
+
+                                        <form id="form-login" onsubmit="handleLogin(event)">
+                                            <div class="mb-3">
+                                                <label for="login-email" class="form-label small fw-bold text-secondary">UiTM Student Email</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                                    <input type="email" class="form-control" id="login-email" value="2026113047@student.uitm.edu.my" required>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="login-password" class="form-label small fw-bold text-secondary">Password</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+                                                    <input type="password" class="form-control" id="login-password" value="mypassword123" required>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center mb-3 small">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                                                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                                                </div>
+                                                <a href="#" onclick="showToast('Register an account or log in with your saved credentials.', 'info')" class="text-decoration-none text-primary">Forgot Password?</a>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm" style="background-color: var(--uitm-purple); border-color: var(--uitm-purple);">
+                                                Sign In <i class="fa-solid fa-arrow-right-to-bracket ms-1"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Register Tab -->
+                                    <div class="tab-pane fade" id="pills-register" role="tabpanel">
+                                        <div class="text-center mb-3">
+                                            <h4 class="fw-bold text-dark">New Student Registration</h4>
+                                            <p class="text-muted small">Create and save your student account</p>
+                                        </div>
+                                        <form id="form-register" onsubmit="handleRegister(event)">
+                                            <div class="mb-2">
+                                                <label class="form-label small fw-bold text-secondary">Full Name</label>
+                                                <input type="text" class="form-control" id="reg-name" placeholder="e.g. Nur Aina" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label small fw-bold text-secondary">Student ID Number</label>
+                                                <input type="text" class="form-control" id="reg-id" placeholder="2024123456" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label small fw-bold text-secondary">Email Address</label>
+                                                <input type="email" class="form-control" id="reg-email" placeholder="student@uitm.edu.my" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold text-secondary">Password</label>
+                                                <input type="password" class="form-control" id="reg-password" placeholder="••••••••" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-info w-100 fw-bold py-2 text-dark shadow-sm" style="background-color: var(--uitm-yellow); border-color: var(--uitm-yellow);">
+                                                Register & Save Account <i class="fa-solid fa-user-plus ms-1"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. DASHBOARD PAGE -->
+                <section id="view-dashboard" class="page-view">
+                    <!-- Welcome Banner with Live Academic Clock & Status -->
+                    <div class="card card-custom p-4 mb-4 text-white border-0" style="background: linear-gradient(135deg, var(--uitm-dark-purple), var(--uitm-purple));">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+                            <div>
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                    <span class="badge badge-uitm">Semester 5 - Active Session</span>
+                                    <span class="badge bg-dark bg-opacity-25 text-white font-monospace" id="live-clock-badge">
+                                        <i class="fa-regular fa-clock text-warning me-1"></i>Loading time...
+                                    </span>
+                                </div>
+                                <h2 class="fw-bold mb-1">Academic & Internship Dashboard</h2>
+                                <p class="mb-0 text-light opacity-90">Welcome back, <span id="dash-user-display" class="fw-bold text-warning">Aina Binti Ali</span> (ID: <span id="dash-id-display">2023459812</span>)</p>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-light btn-sm fw-bold" onclick="navigateTo('profile')">
+                                    <i class="fa-solid fa-id-card text-primary me-1"></i> Matric ID
+                                </button>
+                                <button class="btn btn-light btn-sm fw-bold" onclick="navigateTo('courses')">
+                                    <i class="fa-solid fa-book-open text-primary me-1"></i> Catalog
+                                </button>
+                                <button class="btn btn-warning btn-sm fw-bold text-dark" onclick="navigateTo('internship')">
+                                    <i class="fa-solid fa-briefcase me-1"></i> Tasks
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Next Class / Campus Status Strip -->
+                    <div class="card card-custom px-4 py-3 mb-4 border-start border-4 border-primary">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary small mb-1">SMART SCHEDULE PULSE</span>
+                                    <p class="mb-0 small fw-semibold text-body" id="next-class-indicator">Next Scheduled Lab: IMS566 - Advanced Web Design (Makmal Komputer 3)</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm fw-semibold align-self-start align-self-md-center" onclick="navigateTo('timetable')">
+                                View Full Timetable →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4 Metric Summary Cards -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card card-custom p-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-bold text-uppercase">Current CGPA</span>
+                                        <h3 class="fw-bold mb-0 text-dark">3.78 <span class="fs-6 text-success fw-bold">+0.12 ↑</span></h3>
+                                        <small class="text-muted">Target: 3.50 (Dean's List)</small>
+                                    </div>
+                                    <div class="metric-icon" style="background-color: #e0f2fe; color: var(--uitm-purple);">
+                                        <i class="fa-solid fa-award"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card card-custom p-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-bold text-uppercase">Enrolled Courses</span>
+                                        <h3 class="fw-bold mb-0 text-dark">6 Subjects</h3>
+                                        <small class="text-muted">18 Credit Hours Total</small>
+                                    </div>
+                                    <div class="metric-icon bg-primary-subtle text-primary">
+                                        <i class="fa-solid fa-book"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card card-custom p-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-bold text-uppercase">IMS566 Project</span>
+                                        <h3 class="fw-bold mb-0 text-dark">92% <span class="fs-6 text-warning fw-bold">Ready</span></h3>
+                                        <small class="text-muted">Continuous Assessment</small>
+                                    </div>
+                                    <div class="metric-icon bg-warning-subtle text-warning">
+                                        <i class="fa-solid fa-code"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card card-custom p-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="text-muted small fw-bold text-uppercase">Internship Offers</span>
+                                        <h3 class="fw-bold mb-0 text-dark">4 Companies</h3>
+                                        <small class="text-muted">2 Interviews Scheduled</small>
+                                    </div>
+                                    <div class="metric-icon bg-success-subtle text-success">
+                                        <i class="fa-solid fa-building-user"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Visualization Row -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-12 col-lg-7">
+                            <div class="card card-custom p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 class="fw-bold mb-0">Course Continuous Assessment Score Breakdown</h5>
+                                        <small class="text-muted">Marks achieved vs total available marks per course (60%)</small>
+                                    </div>
+                                    <span class="badge bg-primary">Chart 1</span>
+                                </div>
+                                <div class="chart-container" style="position: relative; height: 260px; width:100%;">
+                                    <canvas id="chartGradesBar"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-5">
+                            <div class="card card-custom p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 class="fw-bold mb-0">Task & Internship Status</h5>
+                                        <small class="text-muted">Progress across all registered tasks</small>
+                                    </div>
+                                    <span class="badge bg-warning text-dark">Chart 2</span>
+                                </div>
+                                <div class="chart-container d-flex justify-content-center align-items-center" style="position: relative; height: 260px; width:100%;">
+                                    <canvas id="chartTaskDoughnut"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Table -->
+                    <div class="card card-custom p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Recent Activity & Task Deadlines</h5>
+                            <button onclick="navigateTo('internship')" class="btn btn-outline-primary btn-sm fw-bold">Manage All Tasks →</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light small uppercase">
+                                    <tr>
+                                        <th>Task / Entity</th>
+                                        <th>Category</th>
+                                        <th>Deadline</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dash-recent-tasks"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. DATA VIEW PAGE 1: COURSE CATALOG -->
+                <section id="view-courses" class="page-view">
+                    <div class="card card-custom p-4 mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                            <div>
+                                <h3 class="fw-bold mb-1">Registered Course Catalog</h3>
+                                <p class="text-muted small mb-0">Manage and inspect current academic modules, grades, and faculty instructors</p>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="input-group input-group-sm" style="max-width: 240px;">
+                                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                                    <input type="text" id="course-search-input" oninput="filterCoursesTable()" class="form-control" placeholder="Search course or code...">
+                                </div>
+                                <select id="course-grade-select" onchange="filterCoursesTable()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="ALL">All Grades</option>
+                                    <option value="A+">Grade A+</option>
+                                    <option value="A">Grade A</option>
+                                    <option value="A-">Grade A-</option>
+                                    <option value="B+">Grade B+</option>
+                                </select>
+                                <select id="course-sort-select" onchange="renderCoursesTable()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="default">Sort: Default</option>
+                                    <option value="code-asc">Code (A → Z)</option>
+                                    <option value="title-asc">Title (A → Z)</option>
+                                    <option value="title-desc">Title (Z → A)</option>
+                                    <option value="score-desc">Score (Highest → Lowest)</option>
+                                    <option value="score-asc">Score (Lowest → Highest)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-bottom text-secondary small text-uppercase">
+                                    <tr>
+                                        <th class="ps-4">Code</th>
+                                        <th>Course Title</th>
+                                        <th class="text-center">Credits</th>
+                                        <th class="text-center">Score (60%)</th>
+                                        <th class="text-center">Grade</th>
+                                        <th>Instructor</th>
+                                        <th class="text-end pe-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="courses-table-body"></tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer bg-light d-flex justify-content-between align-items-center text-muted small p-3">
+                            <span id="courses-count-text">Showing courses...</span>
+                            <span class="fw-bold text-dark">Total Credits: 18 Hours</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. DATA VIEW PAGE 2: CLASS TIMETABLE -->
+                <section id="view-timetable" class="page-view">
+                    <div class="card card-custom p-4 mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                            <div>
+                                <h3 class="fw-bold mb-1">Weekly Class Timetable</h3>
+                                <p class="text-muted small mb-0">Semester 5 Lecture & Computer Lab Schedule (Campus Puncak Perdana)</p>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-2 no-print">
+                                <span class="badge badge-uitm px-3 py-2">Group: CDIM2625A</span>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Timetable View Mode">
+                                    <button type="button" id="btn-tt-grid" class="btn btn-primary fw-semibold" onclick="switchTimetableView('grid')">
+                                        <i class="fa-solid fa-table-cells me-1"></i>iCRESS Grid
+                                    </button>
+                                    <button type="button" id="btn-tt-list" class="btn btn-outline-primary fw-semibold" onclick="switchTimetableView('list')">
+                                        <i class="fa-solid fa-list me-1"></i>List View
+                                    </button>
+                                </div>
+                                <select id="timetable-sort-select" onchange="renderTimetableTable()" class="form-select form-select-sm" style="width: auto; display: none;">
+                                    <option value="day">Sort: Day (Mon → Fri)</option>
+                                    <option value="course-asc">Course (A → Z)</option>
+                                    <option value="course-desc">Course (Z → A)</option>
+                                    <option value="type">Class Type (Lab / Lecture)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- iCRESS HORIZONTAL HOURLY GRID VIEW -->
+                    <div id="timetable-grid-wrapper" class="card card-custom p-3 p-md-4 mb-4">
+                        <div class="icress-scroll-container">
+                            <div id="icress-timetable-grid" class="icress-grid"></div>
+                        </div>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 pt-2 border-top small text-muted">
+                            <span><i class="fa-solid fa-circle-info text-primary me-1"></i>Click any class block to view full course & lecturer details.</span>
+                            <span class="d-none d-md-inline">Timeline: 08:00 – 17:00 (24-Hour Format)</span>
+                        </div>
+                    </div>
+
+                    <!-- ORIGINAL LIST VIEW (Hidden by default, toggled via button) -->
+                    <div id="timetable-list-wrapper" class="card card-custom overflow-hidden" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-bottom text-secondary small text-uppercase">
+                                    <tr>
+                                        <th class="ps-4">Day</th>
+                                        <th>Time</th>
+                                        <th>Course Code & Name</th>
+                                        <th>Type</th>
+                                        <th>Venue / Lab</th>
+                                        <th>Lecturer</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="timetable-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. DATA VIEW PAGE 3: EXAM & RESULTS (SEPARATED BY SEMESTER + GPA TREND CHART) -->
+                <section id="view-results" class="page-view">
+                    <div class="card card-custom p-4 mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                            <div>
+                                <h3 class="fw-bold mb-1">Academic Examination & Results</h3>
+                                <p class="text-muted small mb-0">Individual semester examination slips with GPA progression chart and subject breakdown</p>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-2 no-print">
+                                <button onclick="window.print()" class="btn btn-outline-primary btn-sm fw-bold">
+                                    <i class="fa-solid fa-print me-1"></i> Print Slip
+                                </button>
+                                <select id="subject-sem-filter" onchange="renderSeparatedSemesterResults()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="ALL">Show: All Semesters</option>
+                                    <option value="Semester 4">Semester 4 Only</option>
+                                    <option value="Semester 3">Semester 3 Only</option>
+                                    <option value="Semester 2">Semester 2 Only</option>
+                                    <option value="Semester 1">Semester 1 Only</option>
+                                </select>
+                                <select id="results-sort-select" onchange="renderSeparatedSemesterResults()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="sem-desc">Order: Latest → Oldest</option>
+                                    <option value="sem-asc">Order: Oldest → Latest</option>
+                                    <option value="gpa-desc">GPA: Highest → Lowest</option>
+                                    <option value="gpa-asc">GPA: Lowest → Highest</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic GPA & CGPA Progression Line Chart -->
+                    <div class="card card-custom p-4 mb-4 no-print">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="fw-bold mb-0"><i class="fa-solid fa-arrow-trend-up text-primary me-2"></i>GPA & Cumulative CGPA Trajectory (Sem 1 – Sem 4)</h6>
+                                <small class="text-muted">Consistent Dean's List performance above 3.50 threshold</small>
+                            </div>
+                            <span class="badge bg-success">Status: LU (Pass)</span>
+                        </div>
+                        <div style="position: relative; height: 210px; width: 100%;">
+                            <canvas id="chartGpaTrend"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Individual Semester Cards Container -->
+                    <div id="semester-results-container" class="d-flex flex-column gap-4"></div>
+                </section>
+
+                <!-- 6. DATA VIEW PAGE 4: TASK & INTERNSHIP -->
+                <section id="view-internship" class="page-view">
+                    <div class="card card-custom p-4 mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                            <div>
+                                <h3 class="fw-bold mb-1">Task & Internship Tracker</h3>
+                                <p class="text-muted small mb-0">Monitor industrial placement offers, deliverables, status changes, and priority tasks</p>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="input-group input-group-sm" style="max-width: 220px;">
+                                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                                    <input type="text" id="task-search-input" oninput="filterTasksTable()" class="form-control" placeholder="Search task/company...">
+                                </div>
+                                <select id="task-status-select" onchange="filterTasksTable()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="ALL">All Statuses</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Offered">Offered</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                                <select id="task-sort-select" onchange="renderTasksTable()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="default">Sort: Default</option>
+                                    <option value="date-asc">Deadline (Earliest → Latest)</option>
+                                    <option value="date-desc">Deadline (Latest → Earliest)</option>
+                                    <option value="title-asc">Title (A → Z)</option>
+                                    <option value="title-desc">Title (Z → A)</option>
+                                    <option value="status">Status</option>
+                                </select>
+                                <button onclick="openAddTaskModal()" class="btn btn-primary btn-sm fw-bold shadow-sm" style="background-color: var(--uitm-purple); border-color: var(--uitm-purple);">
+                                    <i class="fa-solid fa-plus me-1"></i> Add Record
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-bottom text-secondary small text-uppercase">
+                                    <tr>
+                                        <th class="ps-4">Title / Entity</th>
+                                        <th>Category</th>
+                                        <th>Deadline / Date</th>
+                                        <th class="text-center">Status Badge</th>
+                                        <th>Notes / Location</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tasks-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. DATA VIEW PAGE 5: ACADEMIC CALENDAR -->
+                <section id="view-calendar" class="page-view">
+                    <div class="card card-custom p-4 mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                            <div>
+                                <h3 class="fw-bold mb-1">UiTM Academic Calendar</h3>
+                                <p class="text-muted small mb-0">Key academic dates, registration periods, study week, and examination schedules</p>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="badge bg-primary px-3 py-2">Session 2026/2027</span>
+                                <select id="calendar-sort-select" onchange="renderCalendarTable()" class="form-select form-select-sm" style="width: auto;">
+                                    <option value="date-asc">Date (Earliest → Latest)</option>
+                                    <option value="date-desc">Date (Latest → Earliest)</option>
+                                    <option value="activity-asc">Activity (A → Z)</option>
+                                    <option value="activity-desc">Activity (Z → A)</option>
+                                    <option value="status">Status</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-bottom text-secondary small text-uppercase">
+                                    <tr>
+                                        <th class="ps-4">Academic Activity</th>
+                                        <th>Date Range</th>
+                                        <th>Duration</th>
+                                        <th class="text-end pe-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendar-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. DEDICATED ADVANCED STUDENT PROFILE & INTERACTIVE 3D MATRIC PAGE -->
+                <section id="view-profile" class="page-view">
+                    <div class="row g-4 mb-4">
+                        <!-- Left Column: Interactive 3D Flip Digital UiTM Matric Card -->
+                        <div class="col-12 col-lg-4">
+                            <div class="flip-card-container" onclick="this.classList.toggle('flipped')" title="Click card to flip Front / Back">
+                                <div class="flip-card-inner">
+                                    <!-- FRONT OF MATRIC CARD -->
+                                    <div class="flip-card-front digital-matric-card p-4 text-white rounded-4 shadow-lg d-flex flex-column justify-content-between">
+                                        <div class="matric-glow"></div>
+                                        <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                                            <div>
+                                                <span class="badge bg-warning text-dark fw-bold" style="font-size: 0.68rem;">UiTM DIGITAL MATRIC</span>
+                                                <div class="fw-bold small mt-1 opacity-90">Universiti Teknologi MARA</div>
+                                            </div>
+                                            <span class="badge bg-dark bg-opacity-20 text-white" style="font-size: 0.65rem;">
+                                                <i class="fa-solid fa-rotate me-1"></i>Tap to Flip
+                                            </span>
+                                        </div>
+
+                                        <div class="text-center my-3 position-relative z-1">
+                                            <div class="position-relative d-inline-block mb-2">
+                                                <img id="page-profile-img" src="acapapa.jpeg" alt="Student Photo" width="100" height="100" class="rounded-circle border border-3 border-warning shadow-sm object-fit-cover">
+                                                <button type="button" class="btn btn-warning btn-sm rounded-circle position-absolute bottom-0 end-0 shadow-sm" onclick="event.stopPropagation(); document.getElementById('profile-pic-input').click();" title="Upload New Photo">
+                                                    <i class="fa-solid fa-camera text-dark"></i>
+                                                </button>
+                                            </div>
+                                            <h5 id="page-profile-name" class="fw-bold mb-0 text-uppercase">Aina Binti Ali</h5>
+                                            <div id="page-profile-id" class="text-warning fw-bold font-monospace">2023459812</div>
+                                            <span class="badge bg-light bg-opacity-25 text-white mt-1">CDIM262 • Semester 5</span>
+                                        </div>
+
+                                        <div class="bg-white text-dark rounded-3 p-2 text-center position-relative z-1">
+                                            <div id="page-matric-barcode" class="font-monospace fw-bold" style="letter-spacing: 3px; font-size: 0.9rem;">*2023459812*</div>
+                                            <small class="text-muted d-block" style="font-size: 0.65rem;">ACTIVE STUDENT • VALID THRU FEB 2027</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- BACK OF MATRIC CARD -->
+                                    <div class="flip-card-back digital-matric-card p-4 text-white rounded-4 shadow-lg d-flex flex-column justify-content-between">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-center border-bottom border-light border-opacity-25 pb-2 mb-3">
+                                                <span class="fw-bold small text-warning">OFFICIAL CAMPUS CREDENTIALS</span>
+                                                <i class="fa-solid fa-shield-halved text-warning"></i>
+                                            </div>
+                                            <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
+                                                <li><span class="opacity-75 d-block" style="font-size: 0.7rem;">FACULTY</span><strong>Faculty of Information Science</strong></li>
+                                                <li><span class="opacity-75 d-block" style="font-size: 0.7rem;">CAMPUS</span><strong>UiTM Selangor, Kampus Puncak Perdana</strong></li>
+                                                <li><span class="opacity-75 d-block" style="font-size: 0.7rem;">OFFICIAL EMAIL</span><strong id="page-profile-email">student@uitm.edu.my</strong></li>
+                                                <li><span class="opacity-75 d-block" style="font-size: 0.7rem;">LIBRARY & LAB ACCESS</span><span class="badge bg-success">ENABLED (TIER 1)</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="border-top border-light border-opacity-25 pt-2 text-center">
+                                            <small class="opacity-75" style="font-size: 0.68rem;">If found, please return to Auxiliary Police Office, UiTM Shah Alam / Puncak Perdana.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive GPA Target Simulator -->
+                            <div class="card card-custom p-4 mt-4">
+                                <h6 class="fw-bold mb-1 text-body"><i class="fa-solid fa-calculator text-primary me-2"></i>Sem 5 CGPA Simulator</h6>
+                                <p class="text-muted small mb-3">Slide to forecast your cumulative CGPA after Semester 5 (18 credits):</p>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="fw-bold text-muted">Target Sem 5 GPA:</small>
+                                    <span class="badge bg-primary fs-6" id="sim-gpa-display">3.85</span>
+                                </div>
+                                <input type="range" class="form-range" min="2.00" max="4.00" step="0.05" value="3.85" id="sim-gpa-slider" oninput="updateCgpaSimulator(this.value)">
+                                <div class="p-3 rounded-3 bg-light border mt-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-muted d-block">Projected CGPA</small>
+                                        <span class="fs-5 fw-bold text-success" id="sim-projected-cgpa">3.79</span>
+                                    </div>
+                                    <span class="badge badge-uitm" id="sim-honors-badge">Dean's List Eligible</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Editable Student Biodata & Academic Portfolio -->
+                        <div class="col-12 col-lg-8">
+                            <div class="card card-custom p-4 h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                                    <div>
+                                        <h5 class="fw-bold mb-0 text-body"><i class="fa-solid fa-address-card text-primary me-2"></i>Comprehensive Student Biodata & Portfolio</h5>
+                                        <small class="text-muted">Changes auto-sync across your Digital Matric Card, Sidebar, and Dashboard</small>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success border border-success">Verified Record</span>
+                                </div>
+
+                                <form id="form-student-profile" onsubmit="saveStudentProfileDetails(event)">
+                                    <div class="row g-3 small">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Full Name (As per IC)</label>
+                                            <input type="text" class="form-control" id="prof-name" required>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">UiTM Matric Number</label>
+                                            <input type="text" class="form-control" id="prof-id" required>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Student Email</label>
+                                            <input type="email" class="form-control" id="prof-email" readonly>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Phone Number</label>
+                                            <input type="text" class="form-control" id="prof-phone" placeholder="+60 12-345 6789">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Academic Advisor (PA)</label>
+                                            <input type="text" class="form-control" id="prof-advisor" placeholder="Dr. Azlan Sha bin Mohamed">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Hometown / State</label>
+                                            <input type="text" class="form-control" id="prof-state" placeholder="Shah Alam, Selangor">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Current CGPA & Credits</label>
+                                            <input type="text" class="form-control fw-bold text-primary" value="3.78 CGPA • 72 / 120 Earned Credits" readonly>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-muted">Industrial Training Status</label>
+                                            <input type="text" class="form-control fw-bold text-success" value="Eligible for Semester 6 Placement" readonly>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-bold text-muted">Technical Skills & Specialization</label>
+                                            <input type="text" class="form-control" id="prof-skills" placeholder="Web Development, Information Architecture, Database Management">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-bold text-muted">Career & Internship Objective</label>
+                                            <textarea class="form-control" id="prof-bio" rows="3" placeholder="Seeking a Web Development or Business Analyst internship placement..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                                        <button type="submit" class="btn btn-primary fw-bold px-4" style="background-color: var(--uitm-purple); border-color: var(--uitm-purple);">
+                                            <i class="fa-solid fa-floppy-disk me-1"></i> Save Profile Changes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="py-4 border-top no-print">
+                <div class="container-fluid px-4">
+                    <div class="row g-4 text-small">
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex align-items-center gap-2 mb-2 text-white font-bold fs-5">
+                                <i class="fa-solid fa-graduation-cap text-warning"></i>
+                                <span>UiTM IMS566 System</span>
+                            </div>
+                            <p class="small text-muted mb-0">
+                                Advanced Web Design Development and Content Management Individual Assignment Prototype. Fully functional prototype with Chart.js visualization.
+                            </p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h6 class="text-white font-bold uppercase mb-2 small">Content Metadata</h6>
+                            <ul class="list-unstyled small text-muted space-y-1 mb-0">
+                                <li><strong>Course:</strong> IMS566 Advanced Web Design</li>
+                                <li><strong>Faculty:</strong> Information Management</li>
+                                <li><strong>Target Browser:</strong> Google Chrome</li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h6 class="text-white font-bold uppercase mb-2 small">Quick Navigation</h6>
+                            <ul class="list-unstyled small mb-0">
+                                <li><a href="#" onclick="navigateTo('dashboard')">Dashboard</a></li>
+                                <li><a href="#" onclick="navigateTo('courses')">Course Catalog</a></li>
+                                <li><a href="#" onclick="navigateTo('timetable')">Class Timetable</a></li>
+                                <li><a href="#" onclick="navigateTo('internship')">Internship Tracker</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-2 text-md-end">
+                            <p class="small text-muted mt-2 mb-0">&copy; 2026 UiTM. All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- TASK / INTERNSHIP CRUD MODAL -->
+    <div class="modal fade" id="modalTask" tabindex="-1" aria-labelledby="modalTaskTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold" id="modalTaskTitle">Add Task / Internship Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-task" onsubmit="saveTaskRecord(event)">
+                        <input type="hidden" id="task-id">
+                        <div class="mb-3">
+                            <label for="task-title" class="form-label small fw-bold">Title / Company Name</label>
+                            <input type="text" class="form-control" id="task-title" required placeholder="e.g. Petronas Digital Internship">
+                        </div>
+                        <div class="mb-3">
+                            <label for="task-category" class="form-label small fw-bold">Category</label>
+                            <select class="form-select" id="task-category" required>
+                                <option value="Internship Application">Internship Application</option>
+                                <option value="Course Project">Course Project</option>
+                                <option value="Assessment">Assessment</option>
+                                <option value="Administrative">Administrative</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="task-deadline" class="form-label small fw-bold">Deadline / Event Date</label>
+                            <input type="date" class="form-control" id="task-deadline" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="task-status" class="form-label small fw-bold">Status</label>
+                            <select class="form-select" id="task-status" required>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Offered">Offered</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="task-notes" class="form-label small fw-bold">Notes / Location Details</label>
+                            <textarea class="form-control" id="task-notes" rows="2" placeholder="e.g. KLCC Office, Interview scheduled..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btn-sm fw-bold" style="background-color: var(--uitm-purple); border-color: var(--uitm-purple);">Save Record</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js?v=13"></script>
+</body>
+</html>
